@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>People Storage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body class="w3-theme-14">
+  <div id="app">
+    <app-bar></app-bar>
+    <div class="w3-container w3-content">
+      <p class="w3-opacity"><b>Store Person Info:</b></p> 
+      <person-form person="people[0]"></person-form>
+      <p class="w3-opacity"><b>Stored Persons:</b></p>
+      <person-card 
+        v-for="person in people"
+        v-bind:person="person"
+        v-bind:key="person.id">
+      </person-card>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
