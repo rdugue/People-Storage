@@ -53,7 +53,8 @@ Vue.component('person-card', {
             let put = {
                 headers: mHeaders,
                 method: 'PUT',
-                mode: 'cors'
+                mode: 'cors',
+                body: JSON.stringify(this.$data)
             }
             fetch(api_url+'/'+this.id, put)
             .then((response) => {
@@ -101,15 +102,17 @@ Vue.component('person-form', {
     },
     methods: {
       create: function() {
-            let post = new XMLHttpRequest()
-            post.onreadystatechange = function() {
-                if (this.status === 200) {
-                    app.list()
-                }
+            let post = {
+                headers: mHeaders,
+                method: 'POST',
+                mode: 'cors',
+                body: JSON.stringify(this.$data)
             }
-            post.open('POST', api_url, true)
-            post.setRequestHeader('Content-Type', 'application/json')
-            post.send(this.$data)
+            fetch(api_url, postt)
+            .then((response) => {
+                return response.json()
+            })
+            .then((json) => { app.list() })
       }
     }
 })
