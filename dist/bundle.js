@@ -65,40 +65,31 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 
 
-const mHeaders = new Headers({
-    'Content-Type': 'application/json'
-})
+var _vue = __webpack_require__(1);
 
+var _vue2 = _interopRequireDefault(_vue);
 
-const api_url = 'https://mgf17i42jh.execute-api.us-east-1.amazonaws.com/dev/people'
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('app-bar', {
-    template: `
-        <div class="w3-bar w3-large w3-theme-d4">
-            <span class="w3-bar-item">People Storage</span>
-        </div>`
-})
+var mHeaders = new Headers({
+    'Accept': 'application/json'
+});
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('person-card', {
+var api_url = 'https://mgf17i42jh.execute-api.us-east-1.amazonaws.com/dev/people';
+
+_vue2.default.component('app-bar', {
+    template: '\n        <div class="w3-bar w3-large w3-theme-d4">\n            <span class="w3-bar-item">People Storage</span>\n        </div>'
+});
+
+_vue2.default.component('person-card', {
     props: ['person'],
-    template: `
-        <div class="w3-panel w3-white w3-card-2 w3-display-container">
-            <span class="w3-display-topright w3-padding w3-hover-red">X</span>
-            <p class="w3-text-blue"><b>{{ fullName }}</b></p>
-            <p>{{ birthdate }}</p>
-            <p>{{ phone_number }}</p>
-            <p>{{ zip_code }}</p>
-            <p></p><button class="w3-button w3-black">Edit</button></p>
-        </div>`,
-    data: function() {
+    template: '\n        <div class="w3-panel w3-white w3-card-2 w3-display-container">\n            <span class="w3-display-topright w3-padding w3-hover-red">X</span>\n            <p class="w3-text-blue"><b>{{ fullName }}</b></p>\n            <p>{{ birthdate }}</p>\n            <p>{{ phone_number }}</p>\n            <p>{{ zip_code }}</p>\n            <p></p><button class="w3-button w3-black">Edit</button></p>\n        </div>',
+    data: function data() {
         return {
             id: this.person.id,
             first_name: this.person.first_name,
@@ -106,36 +97,23 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('person-card', {
             birthdate: this.person.birthdate,
             phone_number: this.person.phone_number,
             zip_code: this.person.zip_code
-        }
+        };
     },
     methods: {
-        edit: function(person) {},
-        delete: function() {}
+        edit: function edit(person) {},
+        delete: function _delete() {}
     },
     computed: {
-       fullName: function(){
-            return this.first_name + ' ' + this.last_name
-        } 
+        fullName: function fullName() {
+            return this.first_name + ' ' + this.last_name;
+        }
     }
-})
+});
 
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('person-form', {
+_vue2.default.component('person-form', {
     props: ['person'],
-    template: `
-        <form class="w3-container w3-card-2">
-            <p><label>First name</label></p>
-            <p></p><input v-model="first_name" class="w3-input" type="text"></p>
-            <p><label>Last name</label></p>
-            <p></p><input v-model="last_name" class="w3-input" type="text"></p>
-            <p><label>Birthdate</label></p>
-            <p></p><input v-model="birthdate" class="w3-input" type="date"></p>
-            <p><label>Phone number</label></p>
-            <p></p><input v-model="phone_number" class="w3-input" type="tel"></p>
-            <p><label>Zip code</label></p>
-            <p></p><input v-model="zip_code" class="w3-input" type="text"></p>
-            <p><button v-on:click="create" class="w3-button w3-black">Submit</button></p>
-        </form>`,
-    data: function() {
+    template: '\n        <form class="w3-container w3-card-2">\n            <p><label>First name</label></p>\n            <p></p><input v-model="first_name" class="w3-input" type="text"></p>\n            <p><label>Last name</label></p>\n            <p></p><input v-model="last_name" class="w3-input" type="text"></p>\n            <p><label>Birthdate</label></p>\n            <p></p><input v-model="birthdate" class="w3-input" type="date"></p>\n            <p><label>Phone number</label></p>\n            <p></p><input v-model="phone_number" class="w3-input" type="tel"></p>\n            <p><label>Zip code</label></p>\n            <p></p><input v-model="zip_code" class="w3-input" type="text"></p>\n            <p><button v-on:click="create" class="w3-button w3-black">Submit</button></p>\n        </form>',
+    data: function data() {
         return {
             id: this.person.id,
             first_name: this.person.first_name,
@@ -143,65 +121,59 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('person-form', {
             birthdate: this.person.birthdate,
             phone_number: this.person.phone_number,
             zip_code: this.person.zip_code
-        }
+        };
     },
     methods: {
-      create: function() {
-            let post = {
+        create: function create() {
+            var post = {
                 headers: mHeaders,
                 method: 'POST',
                 mode: 'cors',
                 body: this.$data
-            }
-            alert(JSON.stringify(post))
-            fetch(api_url, post)
-            .then(function(response) {
-                return response.json()
-            })
-            .then(function(person) {
-                this.$dispatch('create', person)
-            })
-      }
+            };
+            alert(JSON.stringify(post));
+            fetch(api_url, post).then(function (response) {
+                return response.json();
+            }).then(function (person) {
+                this.$dispatch('create', person);
+            });
+        }
     }
-})
+});
 
-const app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
-  el: '#app',
-  data: {
-    people: [
-        {
+var app = new _vue2.default({
+    el: '#app',
+    data: {
+        people: [{
             id: '0001',
             first_name: "Ralph",
             last_name: "Dugue",
             birthdate: "August 24, 1989",
             phone_number: "850-867-5309",
             zip_code: "12345"
+        }]
+    },
+    events: {
+        'create': function create(person) {
+            this.people.push(person);
         }
-    ]
-  },
-  events: {
-      'create': function(person) {
-          this.people.push(person)
-      }
-  },
-  methods: {
-      list: function() {
-          let get = {
+    },
+    methods: {
+        list: function list() {
+            var get = {
                 headers: mHeaders,
                 method: 'GET',
                 mode: 'cors'
-            }
-            alert(JSON.stringify(post))
-            fetch(api_url, post)
-            .then(function(response) {
-                return response.json()
-            })
-            .then(function(persons) {
-                this.people = persons
-            })
-      }
-  }
-})
+            };
+            fetch(api_url, get).then(function (response) {
+                return response.json();
+            }).then(function (persons) {
+                this.people = persons;
+            });
+        }
+    }
+});
+app.list();
 
 /***/ }),
 /* 1 */

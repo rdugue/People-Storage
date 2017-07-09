@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 const mHeaders = new Headers({
-    'Content-Type': 'application/json'
+    'Accept': 'application/json'
 })
 
 
@@ -118,8 +118,7 @@ const app = new Vue({
                 method: 'GET',
                 mode: 'cors'
             }
-            alert(JSON.stringify(post))
-            fetch(api_url, post)
+            fetch(api_url, get)
             .then(function(response) {
                 return response.json()
             })
@@ -129,3 +128,4 @@ const app = new Vue({
       }
   }
 })
+app.list()
