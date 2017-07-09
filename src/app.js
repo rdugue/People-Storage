@@ -12,19 +12,30 @@ Vue.component('app-bar', {
     template: `
         <div class="w3-bar w3-large w3-theme-d4">
             <span class="w3-bar-item">People Storage</span>
+            <a 
+                href="https://github.com/rdugue/People-Storage" 
+                class="w3-bar-item w3-button w3-right"><i class="fa fa-github"></i></a>
         </div>`
 })
 
 Vue.component('person-card', {
     props: ['person'],
     template: `
-        <div class="w3-panel w3-white w3-card-2 w3-display-container">
+        <form v-if="show" class="w3-panel w3-white w3-card-2 w3-display-container">
+            <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
+            <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
+            <p><input v-model="birthdate" class="w3-input" type="date"></p>
+            <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>
+            <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>
+            <p></p><button v-on:click="edit" class="w3-button w3-black">Submit</button></p>
+        </form>
+        <div v-else-if="!show" class="w3-panel w3-white w3-card-2 w3-display-container">
             <span v-on:click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>
             <p class="w3-text-blue"><b>{{ fullName }}</b></p>
             <p>{{ birthdate }}</p>
             <p>{{ phone_number }}</p>
             <p>{{ zip_code }}</p>
-            <p></p><button class="w3-button w3-black">Edit</button></p>
+            <p></p><button v-on:click="show = !show" class="w3-button w3-black">Edit</button></p>
         </div>`,
     data: function() {
         return {
@@ -33,11 +44,23 @@ Vue.component('person-card', {
             last_name: this.person.last_name,
             birthdate: this.person.birthdate,
             phone_number: this.person.phone_number,
-            zip_code: this.person.zip_code
+            zip_code: this.person.zip_code,
+            show: false
         }
     },
     methods: {
-        edit: function(person) {},
+        edit: function() {
+            let put = {
+                headers: mHeaders,
+                method: 'PUT',
+                mode: 'cors'
+            }
+            fetch(api_url+'/'+this.id, put)
+            .then((response) => {
+                return response.json()
+            })
+            .then((json) => { this.show = !this.show })
+        },
         remove: function() {
             let del = {
                 headers: mHeaders,
@@ -45,9 +68,7 @@ Vue.component('person-card', {
                 mode: 'cors',
             }
             fetch(api_url+'/'+this.id, del)
-            .then((response) => {
-                app.list()
-            })
+            .then((response) => { app.list() })
         }
     },
     computed: {
@@ -60,18 +81,13 @@ Vue.component('person-card', {
 Vue.component('person-form', {
     props: ['person'],
     template: `
-        <form class="w3-container w3-card-2">
-            <p><label>First name</label></p>
-            <p></p><input v-model="first_name" class="w3-input" type="text"></p>
-            <p><label>Last name</label></p>
-            <p></p><input v-model="last_name" class="w3-input" type="text"></p>
-            <p><label>Birthdate</label></p>
-            <p></p><input v-model="birthdate" class="w3-input" type="date"></p>
-            <p><label>Phone number</label></p>
-            <p></p><input v-model="phone_number" class="w3-input" type="tel"></p>
-            <p><label>Zip code</label></p>
-            <p></p><input v-model="zip_code" class="w3-input" type="text"></p>
-            <p><button v-on:click="create" class="w3-button w3-black">Submit</button></p>
+        <form class="w3-panel w3-white w3-card-2 w3-display-container">
+            <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
+            <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
+            <p><input v-model="birthdate" class="w3-input" type="date"></p>
+            <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>
+            <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>
+            <p></p><button v-on:click="create" class="w3-button w3-black">Submit</button></p>
         </form>`,
     data: function() {
         return {
