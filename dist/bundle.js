@@ -77,7 +77,8 @@ var _vue2 = _interopRequireDefault(_vue);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mHeaders = new Headers({
-    'Accept': 'application/json'
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
 });
 
 var api_url = 'https://mgf17i42jh.execute-api.us-east-1.amazonaws.com/dev/people';
@@ -88,7 +89,7 @@ _vue2.default.component('app-bar', {
 
 _vue2.default.component('person-card', {
     props: ['person'],
-    template: '\n        <div class="w3-panel w3-white w3-card-2 w3-display-container">\n            <span class="w3-display-topright w3-padding w3-hover-red">X</span>\n            <p class="w3-text-blue"><b>{{ fullName }}</b></p>\n            <p>{{ birthdate }}</p>\n            <p>{{ phone_number }}</p>\n            <p>{{ zip_code }}</p>\n            <p></p><button class="w3-button w3-black">Edit</button></p>\n        </div>',
+    template: '\n        <div class="w3-panel w3-white w3-card-2 w3-display-container">\n            <span v-on:click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>\n            <p class="w3-text-blue"><b>{{ fullName }}</b></p>\n            <p>{{ birthdate }}</p>\n            <p>{{ phone_number }}</p>\n            <p>{{ zip_code }}</p>\n            <p></p><button class="w3-button w3-black">Edit</button></p>\n        </div>',
     data: function data() {
         return {
             id: this.person.id,
@@ -101,7 +102,18 @@ _vue2.default.component('person-card', {
     },
     methods: {
         edit: function edit(person) {},
-        delete: function _delete() {}
+        remove: function remove() {
+            var _this = this;
+
+            var del = {
+                headers: mHeaders,
+                method: 'DELETE',
+                mode: 'cors'
+            };
+            fetch(api_url + '/' + this.id, del).then(function (response) {
+                _this.$dispatch('delete', response);
+            });
+        }
     },
     computed: {
         fullName: function fullName() {
@@ -125,17 +137,19 @@ _vue2.default.component('person-form', {
     },
     methods: {
         create: function create() {
+            var _this2 = this;
+
             var post = {
                 headers: mHeaders,
                 method: 'POST',
                 mode: 'cors',
-                body: this.$data
+                body: JSON.stringify(this.$data),
+                cache: 'default'
             };
-            alert(JSON.stringify(post));
             fetch(api_url, post).then(function (response) {
                 return response.json();
             }).then(function (person) {
-                this.$dispatch('create', person);
+                _this2.$dispatch('create', person);
             });
         }
     }
@@ -144,22 +158,20 @@ _vue2.default.component('person-form', {
 var app = new _vue2.default({
     el: '#app',
     data: {
-        people: [{
-            id: '0001',
-            first_name: "Ralph",
-            last_name: "Dugue",
-            birthdate: "August 24, 1989",
-            phone_number: "850-867-5309",
-            zip_code: "12345"
-        }]
+        people: []
     },
     events: {
         'create': function create(person) {
             this.people.push(person);
+        },
+        'delete': function _delete(response) {
+            this.list();
         }
     },
     methods: {
         list: function list() {
+            var _this3 = this;
+
             var get = {
                 headers: mHeaders,
                 method: 'GET',
@@ -168,7 +180,7 @@ var app = new _vue2.default({
             fetch(api_url, get).then(function (response) {
                 return response.json();
             }).then(function (persons) {
-                this.people = persons;
+                _this3.people = persons;
             });
         }
     }

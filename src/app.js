@@ -1,7 +1,8 @@
 import Vue from 'vue'
 
 const mHeaders = new Headers({
-    'Accept': 'application/json'
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
 })
 
 
@@ -18,7 +19,7 @@ Vue.component('person-card', {
     props: ['person'],
     template: `
         <div class="w3-panel w3-white w3-card-2 w3-display-container">
-            <span class="w3-display-topright w3-padding w3-hover-red">X</span>
+            <span v-on:click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>
             <p class="w3-text-blue"><b>{{ fullName }}</b></p>
             <p>{{ birthdate }}</p>
             <p>{{ phone_number }}</p>
@@ -37,7 +38,15 @@ Vue.component('person-card', {
     },
     methods: {
         edit: function(person) {},
-        delete: function() {}
+        remove: function() {
+            let del = {
+                headers: mHeaders,
+                method: 'DELETE',
+                mode: 'cors',
+            }
+            fetch(api_url+'/'+this.id, del)
+            .then((response) => { this.$dispatch('delete', response) })
+        }
     },
     computed: {
        fullName: function(){
@@ -78,14 +87,14 @@ Vue.component('person-form', {
                 headers: mHeaders,
                 method: 'POST',
                 mode: 'cors',
-                body: this.$data
+                body: JSON.stringify(this.$data),
+                cache: 'default'
             }
-            alert(JSON.stringify(post))
             fetch(api_url, post)
-            .then(function(response) {
+            .then((response) => {
                 return response.json()
             })
-            .then(function(person) {
+            .then((person) => {
                 this.$dispatch('create', person)
             })
       }
@@ -95,20 +104,14 @@ Vue.component('person-form', {
 const app = new Vue({
   el: '#app',
   data: {
-    people: [
-        {
-            id: '0001',
-            first_name: "Ralph",
-            last_name: "Dugue",
-            birthdate: "August 24, 1989",
-            phone_number: "850-867-5309",
-            zip_code: "12345"
-        }
-    ]
+    people: []
   },
   events: {
       'create': function(person) {
           this.people.push(person)
+      },
+      'delete': function(response) {
+          this.list()
       }
   },
   methods: {
@@ -119,10 +122,10 @@ const app = new Vue({
                 mode: 'cors'
             }
             fetch(api_url, get)
-            .then(function(response) {
+            .then((response) => {
                 return response.json()
             })
-            .then(function(persons) {
+            .then((persons) => {
                 this.people = persons
             })
       }
