@@ -45,7 +45,9 @@ Vue.component('person-card', {
                 mode: 'cors',
             }
             fetch(api_url+'/'+this.id, del)
-            .then((response) => { this.$dispatch('delete', response) })
+            .then((response) => {
+                app.list()
+            })
         }
     },
     computed: {
@@ -83,20 +85,15 @@ Vue.component('person-form', {
     },
     methods: {
       create: function() {
-            let post = {
-                headers: mHeaders,
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify(this.$data),
-                cache: 'default'
+            let post = new XMLHttpRequest()
+            post.onreadystatechange = function() {
+                if (this.status === 200) {
+                    app.list()
+                }
             }
-            fetch(api_url, post)
-            .then((response) => {
-                return response.json()
-            })
-            .then((person) => {
-                this.$dispatch('create', person)
-            })
+            post.open('POST', api_url, true)
+            post.setRequestHeader('Content-Type', 'application/json')
+            post.send(this.$data)
       }
     }
 })
@@ -106,29 +103,21 @@ const app = new Vue({
   data: {
     people: []
   },
-  events: {
-      'create': function(person) {
-          this.people.push(person)
-      },
-      'delete': function(response) {
-          this.list()
-      }
-  },
   methods: {
-      list: function() {
-          let get = {
-                headers: mHeaders,
-                method: 'GET',
-                mode: 'cors'
-            }
-            fetch(api_url, get)
-            .then((response) => {
-                return response.json()
-            })
-            .then((persons) => {
-                this.people = persons
-            })
-      }
+    list: function() {
+        let get = {
+            headers: mHeaders,
+            method: 'GET',
+            mode: 'cors'
+        }
+        fetch(api_url, get)
+        .then((response) => {
+            return response.json()
+        })
+        .then((persons) => {
+            this.people = persons
+        })
+    }
   }
 })
 app.list()

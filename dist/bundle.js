@@ -103,15 +103,13 @@ _vue2.default.component('person-card', {
     methods: {
         edit: function edit(person) {},
         remove: function remove() {
-            var _this = this;
-
             var del = {
                 headers: mHeaders,
                 method: 'DELETE',
                 mode: 'cors'
             };
             fetch(api_url + '/' + this.id, del).then(function (response) {
-                _this.$dispatch('delete', response);
+                app.list();
             });
         }
     },
@@ -137,20 +135,15 @@ _vue2.default.component('person-form', {
     },
     methods: {
         create: function create() {
-            var _this2 = this;
-
-            var post = {
-                headers: mHeaders,
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify(this.$data),
-                cache: 'default'
+            var post = new XMLHttpRequest();
+            post.onreadystatechange = function () {
+                if (this.status === 200) {
+                    app.list();
+                }
             };
-            fetch(api_url, post).then(function (response) {
-                return response.json();
-            }).then(function (person) {
-                _this2.$dispatch('create', person);
-            });
+            post.open('POST', api_url, true);
+            post.setRequestHeader('Content-Type', 'application/json');
+            post.send(this.$data);
         }
     }
 });
@@ -160,17 +153,9 @@ var app = new _vue2.default({
     data: {
         people: []
     },
-    events: {
-        'create': function create(person) {
-            this.people.push(person);
-        },
-        'delete': function _delete(response) {
-            this.list();
-        }
-    },
     methods: {
         list: function list() {
-            var _this3 = this;
+            var _this = this;
 
             var get = {
                 headers: mHeaders,
@@ -180,7 +165,7 @@ var app = new _vue2.default({
             fetch(api_url, get).then(function (response) {
                 return response.json();
             }).then(function (persons) {
-                _this3.people = persons;
+                _this.people = persons;
             });
         }
     }
