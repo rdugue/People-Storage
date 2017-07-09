@@ -89,7 +89,7 @@ _vue2.default.component('app-bar', {
 
 _vue2.default.component('person-card', {
     props: ['person'],
-    template: '\n        <div v-if="show" class="w3-panel w3-white w3-card-2 w3-display-container">\n            <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>\n            <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>\n            <p><input v-model="birthdate" class="w3-input" type="date"></p>\n            <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>\n            <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>\n            <p></p><button v-on:click="edit" class="w3-button w3-black">Submit</button></p>\n        </div>\n        <div v-else-if="!show" class="w3-panel w3-white w3-card-2 w3-display-container">\n            <span v-on:click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>\n            <p class="w3-text-blue"><b>{{ fullName }}</b></p>\n            <p>{{ birthdate }}</p>\n            <p>{{ phone_number }}</p>\n            <p>{{ zip_code }}</p>\n            <p></p><button v-on:click="show = !show" class="w3-button w3-black">Edit</button></p>\n        </div>',
+    template: '\n        <div v-if="show" class="w3-panel w3-white w3-card-2 w3-display-container">\n            <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>\n            <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>\n            <p><input v-model="birthdate" class="w3-input" type="date"></p>\n            <p><input v-model="phone_number" class="w3-input" type="tel" placeholder="Phone"></p>\n            <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>\n            <p></p><button v-on:click="edit" class="w3-button w3-black">Submit</button></p>\n        </div>\n        <div v-else-if="!show" class="w3-panel w3-white w3-card-2 w3-display-container">\n            <span v-on:click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>\n            <p class="w3-text-blue"><b>{{ fullName }}</b></p>\n            <p>{{ birthdate }}</p>\n            <p>{{ phone_number }}</p>\n            <p>{{ zip_code }}</p>\n            <p></p><button v-on:click="show = !show" class="w3-button w3-black">Edit</button></p>\n        </div>',
     data: function data() {
         return {
             id: this.person.id,
@@ -140,7 +140,6 @@ _vue2.default.component('person-form', {
     template: '\n        <div class="w3-panel w3-white w3-card-2 w3-display-container">\n            <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>\n            <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>\n            <p><input v-model="birthdate" class="w3-input" type="date"></p>\n            <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>\n            <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>\n            <p></p><button v-on:click="create" class="w3-button w3-black">Submit</button></p>\n        </div>',
     data: function data() {
         return {
-            id: this.person.id,
             first_name: this.person.first_name,
             last_name: this.person.last_name,
             birthdate: this.person.birthdate,
@@ -150,6 +149,8 @@ _vue2.default.component('person-form', {
     },
     methods: {
         create: function create() {
+            var _this2 = this;
+
             var post = {
                 headers: mHeaders,
                 method: 'POST',
@@ -160,6 +161,11 @@ _vue2.default.component('person-form', {
                 return response.json();
             }).then(function (json) {
                 app.list();
+                _this2.first_name = '';
+                _this2.last_name = '';
+                _this2.birthdate = '';
+                _this2.phone_number = '';
+                _this2.zip_code = '';
             });
         }
     }
@@ -172,7 +178,7 @@ var app = new _vue2.default({
     },
     methods: {
         list: function list() {
-            var _this2 = this;
+            var _this3 = this;
 
             var get = {
                 headers: mHeaders,
@@ -182,7 +188,7 @@ var app = new _vue2.default({
             fetch(api_url, get).then(function (response) {
                 return response.json();
             }).then(function (persons) {
-                _this2.people = persons;
+                _this3.people = persons;
             });
         }
     }

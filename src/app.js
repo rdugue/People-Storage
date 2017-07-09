@@ -25,7 +25,7 @@ Vue.component('person-card', {
             <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
             <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
             <p><input v-model="birthdate" class="w3-input" type="date"></p>
-            <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>
+            <p><input v-model="phone_number" class="w3-input" type="tel" placeholder="Phone"></p>
             <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>
             <p></p><button v-on:click="edit" class="w3-button w3-black">Submit</button></p>
         </div>
@@ -92,7 +92,6 @@ Vue.component('person-form', {
         </div>`,
     data: function() {
         return {
-            id: this.person.id,
             first_name: this.person.first_name,
             last_name: this.person.last_name,
             birthdate: this.person.birthdate,
@@ -112,7 +111,14 @@ Vue.component('person-form', {
             .then((response) => {
                 return response.json()
             })
-            .then((json) => { app.list() })
+            .then((json) => { 
+                app.list() 
+                this.first_name = ''
+                this.last_name = ''
+                this.birthdate = ''
+                this.phone_number = ''
+                this.zip_code = ''
+            })
       }
     }
 })
