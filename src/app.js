@@ -21,14 +21,14 @@ Vue.component('app-bar', {
 Vue.component('person-card', {
     props: ['person'],
     template: `
-        <form v-if="show" class="w3-panel w3-white w3-card-2 w3-display-container">
+        <div v-if="show" class="w3-panel w3-white w3-card-2 w3-display-container">
             <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
             <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
             <p><input v-model="birthdate" class="w3-input" type="date"></p>
             <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>
             <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>
             <p></p><button v-on:click="edit" class="w3-button w3-black">Submit</button></p>
-        </form>
+        </div>
         <div v-else-if="!show" class="w3-panel w3-white w3-card-2 w3-display-container">
             <span v-on:click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>
             <p class="w3-text-blue"><b>{{ fullName }}</b></p>
@@ -82,14 +82,14 @@ Vue.component('person-card', {
 Vue.component('person-form', {
     props: ['person'],
     template: `
-        <form class="w3-panel w3-white w3-card-2 w3-display-container">
+        <div class="w3-panel w3-white w3-card-2 w3-display-container">
             <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
             <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
             <p><input v-model="birthdate" class="w3-input" type="date"></p>
             <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>
             <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>
             <p></p><button v-on:click="create" class="w3-button w3-black">Submit</button></p>
-        </form>`,
+        </div>`,
     data: function() {
         return {
             id: this.person.id,
@@ -108,7 +108,7 @@ Vue.component('person-form', {
                 mode: 'cors',
                 body: JSON.stringify(this.$data)
             }
-            fetch(api_url, postt)
+            fetch(api_url, post)
             .then((response) => {
                 return response.json()
             })
