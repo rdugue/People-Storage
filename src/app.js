@@ -49,7 +49,7 @@ Vue.component('person-card', {
             }
             fetch(api_url, post)
             .then((response) => {
-                this.show = !this.show
+                this.show = false
                 app.list()
             })
         },

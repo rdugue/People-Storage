@@ -124,7 +124,7 @@ _vue2.default.component('person-card', {
                 body: JSON.stringify(body)
             };
             fetch(api_url, post).then(function (response) {
-                _this.show = !_this.show;
+                _this.show = false;
                 app.list();
             });
         },
