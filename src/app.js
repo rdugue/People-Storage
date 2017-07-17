@@ -1,12 +1,13 @@
 import Vue from 'vue'
+import VeeValidate from 'vee-validate'
 
 const mHeaders = new Headers({
     'Accept': 'application/json',
     'Content-Type': 'application/json'
 })
-
-
 const api_url = 'https://mgf17i42jh.execute-api.us-east-1.amazonaws.com/dev/people'
+
+Vue.use(VeeValidate)
 
 Vue.component('app-bar', {
     template: `
@@ -83,8 +84,10 @@ Vue.component('person-form', {
     props: ['person'],
     template: `
         <div class="w3-panel w3-white w3-card-2 w3-display-container">
-            <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
-            <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
+            <p><input v-validate="'required|alpha_dash'" name="f_name" v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
+            <span v-show="errors.has('f_name')" class="help is-danger">{{ errors.first('f_name') }}</span>
+            <p><input v-validate="'required|alpha_dash'" name="l_name"v v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
+            <span v-show="errors.has('l_name')" class="help is-danger">{{ errors.first('l_name') }}</span>
             <p><input v-model="birthdate" class="w3-input" type="date"></p>
             <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>
             <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>
