@@ -21,23 +21,7 @@ Vue.component('app-bar', {
 
 Vue.component('person-card', {
     props: ['person'],
-    template: `
-        <div v-if="show" class="w3-panel w3-white w3-card-2 w3-display-container">
-            <p><input v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
-            <p><input v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
-            <p><input v-model="birthdate" class="w3-input" type="date"></p>
-            <p><input v-model="phone_number" class="w3-input" type="tel" placeholder="Phone"></p>
-            <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>
-            <p></p><button v-on:click="edit" class="w3-button w3-black">Submit</button></p>
-        </div>
-        <div v-else-if="!show" class="w3-panel w3-white w3-card-2 w3-display-container">
-            <span v-on:click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>
-            <p class="w3-text-blue"><b>{{ fullName }}</b></p>
-            <p>{{ birthdate }}</p>
-            <p>{{ phone_number }}</p>
-            <p>{{ zip_code }}</p>
-            <p></p><button v-on:click="show = !show" class="w3-button w3-black">Edit</button></p>
-        </div>`,
+    template: require('./templates/person-card.html'),
     data: function() {
         return {
             id: this.person.id,
@@ -50,18 +34,24 @@ Vue.component('person-card', {
         }
     },
     methods: {
-        edit: function() {
-            let put = {
+        validate: function() {
+            this.$validator.validateAll()
+            .then(result => result)
+        },
+        update: function() {
+            let body = this.$data
+            delete body['show']
+            const post = {
                 headers: mHeaders,
-                method: 'PUT',
+                method: 'POST',
                 mode: 'cors',
-                body: JSON.stringify(this.$data)
+                body: JSON.stringify(body)
             }
-            fetch(api_url+'/'+this.id, put)
+            fetch(api_url, post)
             .then((response) => {
-                return response.json()
+                this.show = !this.show
+                app.list()
             })
-            .then((json) => { this.show = !this.show })
         },
         remove: function() {
             let del = {
@@ -82,19 +72,10 @@ Vue.component('person-card', {
 
 Vue.component('person-form', {
     props: ['person'],
-    template: `
-        <div class="w3-panel w3-white w3-card-2 w3-display-container">
-            <p><input v-validate="'required|alpha_dash'" name="f_name" v-model="first_name" class="w3-input" type="text" placeholder="First name"></p>
-            <span v-show="errors.has('f_name')" class="help is-danger">{{ errors.first('f_name') }}</span>
-            <p><input v-validate="'required|alpha_dash'" name="l_name"v v-model="last_name" class="w3-input" type="text" placeholder="Last name"></p>
-            <span v-show="errors.has('l_name')" class="help is-danger">{{ errors.first('l_name') }}</span>
-            <p><input v-model="birthdate" class="w3-input" type="date"></p>
-            <p><input v-model="phone_number" class="w3-input" type="text" placeholder="Phone"></p>
-            <p><input v-model="zip_code" class="w3-input" type="text" placeholder="Zip code"></p>
-            <p></p><button v-on:click="create" class="w3-button w3-black">Submit</button></p>
-        </div>`,
+    template: require('./templates/person-from.html'),
     data: function() {
         return {
+            id: this.person.id,
             first_name: this.person.first_name,
             last_name: this.person.last_name,
             birthdate: this.person.birthdate,
@@ -103,6 +84,10 @@ Vue.component('person-form', {
         }
     },
     methods: {
+      validate: function() {
+          this.$validator.validateAll()
+          .then(result => result)
+      },
       create: function() {
             let post = {
                 headers: mHeaders,
@@ -112,9 +97,6 @@ Vue.component('person-form', {
             }
             fetch(api_url, post)
             .then((response) => {
-                return response.json()
-            })
-            .then((json) => { 
                 app.list() 
                 this.first_name = ''
                 this.last_name = ''
