@@ -1,0 +1,72 @@
+<div class="w3-panel w3-white w3-card-2 w3-display-container">
+    <p>
+        <input 
+            v-validate="'required|alpha_spaces'" 
+            name="f_name" 
+            v-model="first_name" 
+            class="w3-input" 
+            type="text" 
+            placeholder="First name"
+            :class="{'input': true, 'is-danger': errors.has('f_name') }">
+    </p>
+    <span v-show="errors.has('f_name')" class="help is-danger">
+        {{ errors.first('f_name') }}
+    </span>
+    <p>
+        <input 
+            v-validate="'required|alpha_spaces'" 
+            name="l_name" 
+            v-model="last_name" 
+            class="w3-input" 
+            type="text" 
+            placeholder="Last name"
+            :class="{'input': true, 'is-danger': errors.has('l_name') }">
+    </p>
+    <span v-show="errors.has('l_name')" class="help is-danger">
+        {{ errors.first('l_name') }}
+    </span>
+    <p>
+        <input 
+            v-validate="'required|date_format'" 
+            name="birthdate" 
+            v-model="birthdate" 
+            class="w3-input" 
+            type="date"
+            :class="{'input': true, 'is-danger': errors.has('birthdate') }">
+    </p>
+    <span v-show="errors.has('birthdate')" class="help is-danger">
+        {{ errors.first('birthdate') }}
+    </span>
+    <p>
+        <input 
+            v-validate="'required|digits:10'" 
+            name="phone" 
+            v-model="phone_number" 
+            class="w3-input" 
+            type="text" 
+            placeholder="Phone"
+            :class="{'input': true, 'is-danger': errors.has('phone') }">
+    </p>
+    <span v-show="errors.has('phone')" class="help is-danger">
+        {{ errors.first('phone') }}
+    </span>
+    <p>
+        <input 
+            v-validate="'required|digits:5'" 
+            name="zip" 
+            v-model="zip_code" 
+            class="w3-input" 
+            type="text" 
+            placeholder="Zip code"
+            :class="{'input': true, 'is-danger': errors.has('zip') }">
+    </p>
+    <span v-show="errors.has('zip')" class="help is-danger">
+        {{ errors.first('zip') }}
+    </span>
+    <p>
+        <button 
+            :disabled="!validate" 
+            v-on:click="create" 
+            class="w3-button w3-black">Submit</button>
+    </p>
+</div>
