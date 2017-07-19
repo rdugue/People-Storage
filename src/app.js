@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import VeeValidate from 'vee-validate'
+import moment from 'moment'
+import VeeValidate, { Validator } from 'vee-validate'
 
 const mHeaders = new Headers({
     'Accept': 'application/json',
@@ -7,6 +8,7 @@ const mHeaders = new Headers({
 })
 const api_url = 'https://mgf17i42jh.execute-api.us-east-1.amazonaws.com/dev/people'
 
+Validator.installDateTimeValidators(moment)
 Vue.use(VeeValidate)
 
 Vue.component('app-bar', {
@@ -36,7 +38,11 @@ Vue.component('person-card', {
     methods: {
         validate: function() {
             this.$validator.validateAll()
-            .then(result => result)
+            .then(result => { 
+                if (result) {
+                    this.update()
+                }
+             })
         },
         update: function() {
             let body = this.$data
@@ -85,8 +91,12 @@ Vue.component('person-form', {
     },
     methods: {
       validate: function() {
-          this.$validator.validateAll()
-          .then(result => result)
+            this.$validator.validateAll()
+            .then(result => { 
+                if (result) {
+                    this.create()
+                }
+            })
       },
       create: function() {
             let post = {

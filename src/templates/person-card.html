@@ -1,4 +1,7 @@
-<div v-if="show" class="w3-panel w3-white w3-card-2 w3-display-container">
+<form 
+    v-if="show" 
+    class="w3-panel w3-white w3-card-2 w3-display-container"
+    @submit.prevent="validate">
     <p>
         <input 
             v-validate="'required|alpha_spaces'" 
@@ -27,7 +30,7 @@
     </span>
     <p>
         <input 
-            v-validate="'required|date_format'" 
+            v-validate="'required|date_format:YYYY-MM-DD'" 
             name="birthdate" 
             v-model="birthdate" 
             class="w3-input" 
@@ -64,17 +67,14 @@
         {{ errors.first('zip') }}
     </span>
     <p>
-        <button 
-            :disabled="!validate" 
-            v-on:click="update" 
-            class="w3-button w3-black">Submit</button>
+        <button class="w3-button w3-black">Submit</button>
     </p>
-</div>
+</form>
 <div v-else-if="!show" class="w3-panel w3-white w3-card-2 w3-display-container">
-    <span v-on:click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>
+    <span @click="remove" class="w3-display-topright w3-padding w3-hover-red">X</span>
     <p class="w3-text-blue"><b>{{ fullName }}</b></p>
     <p>{{ birthdate }}</p>
     <p>{{ phone_number }}</p>
     <p>{{ zip_code }}</p>
-    <p><button v-on:click="show = !show" class="w3-button w3-black">Edit</button></p>
+    <p><button @click="show = !show" class="w3-button w3-black">Edit</button></p>
 </div>
