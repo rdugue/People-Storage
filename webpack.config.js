@@ -2,6 +2,7 @@ var path = require('path');
 
 module.exports = {
   entry: './src/app.js',
+  devtool: 'inline-source-map',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
@@ -10,6 +11,12 @@ module.exports = {
     alias: {
         vue: 'vue/dist/vue.js'
     }
+  },
+  devServer: {
+    contentBase: [
+      './src',
+      '.'
+    ]
   },
   module: {
     loaders: [
