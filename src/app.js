@@ -41,6 +41,7 @@ Vue.component('person-card', {
             .then(result => { 
                 if (result) {
                     this.update()
+                    return
                 }
              })
         },
@@ -55,7 +56,7 @@ Vue.component('person-card', {
             }
             fetch(api_url, post)
             .then((response) => {
-                this.show = false
+                this.show = !this.show
                 app.list()
             })
         },
@@ -95,6 +96,7 @@ Vue.component('person-form', {
             .then(result => { 
                 if (result) {
                     this.create()
+                    return
                 }
             })
       },
