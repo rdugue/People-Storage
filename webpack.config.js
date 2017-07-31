@@ -5,7 +5,8 @@ module.exports = {
   devtool: 'inline-source-map',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/dist'
   },
   resolve: {
     alias: {
@@ -13,10 +14,7 @@ module.exports = {
     }
   },
   devServer: {
-    contentBase: [
-      './src',
-      '.'
-    ]
+    contentBase: path.resolve(__dirname, 'dist') 
   },
   module: {
     loaders: [
