@@ -4,7 +4,7 @@
   "description": "CRUD application for storing info of people ",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "webpack-dev-server --open",
+    "start": "webpack-dev-server --watch",
     "build": "webpack"
   },
   "repository": {
