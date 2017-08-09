@@ -41,7 +41,6 @@ Vue.component('person-card', {
             .then(result => { 
                 if (result) {
                     this.update()
-                    this.show = !this.show
                     return
                 }
              })
@@ -57,7 +56,7 @@ Vue.component('person-card', {
             }
             fetch(api_url, post)
             .then((response) => {
-                //this.show = !this.show
+                this.show = !this.show
                 app.list()
             })
         },
