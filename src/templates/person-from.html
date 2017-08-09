@@ -1,6 +1,6 @@
 <form 
     class="w3-panel w3-white w3-card-2 w3-display-container"
-    @submit.prevent="validate">
+    @submit="validate">
     <p>
         <input 
             v-validate="'required|alpha_spaces'" 
@@ -66,6 +66,6 @@
         {{ errors.first('zip') }}
     </span>
     <p>
-        <button class="w3-button w3-black">Submit</button>
+        <button class="w3-button w3-black" type="submit">Submit</button>
     </p>
 </form>
